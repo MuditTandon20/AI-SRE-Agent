@@ -1,0 +1,17 @@
+include LICENSE README.md CHANGELOG.md CONTRIBUTING.md CODE_OF_CONDUCT.md SECURITY.md
+include requirements.txt requirements-dev.txt constraints.txt pyproject.toml
+include main.py db_check.py Dockerfile .dockerignore .env.example docker-compose.yml prometheus.yml
+include PROJECT_PLAN.md NOTES.md
+recursive-include ai_sre_agent *.py *.sql *.md
+recursive-include tests *.py
+recursive-include scripts *.py
+recursive-include infra *.yml *.alloy
+recursive-include examples *.md *.json
+recursive-include docs *.md
+recursive-include .github *.yml *.md
+exclude .env
+prune .demo
+prune .venv
+prune .git
+prune artifacts
+global-exclude __pycache__ *.pyc

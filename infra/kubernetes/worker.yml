@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-sre-worker
+  namespace: ai-sre
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ai-sre, component: worker}
+  template:
+    metadata:
+      labels: {app: ai-sre, component: worker}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 160
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, fsGroup: 10001}
+      containers:
+        - name: worker
+          image: ai-sre-agent:0.1.0-dev
+          command: [python, -m, ai_sre_agent.worker]
+          envFrom:
+            - configMapRef: {name: ai-sre-config}
+            - secretRef: {name: ai-sre-secrets}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: '1', memory: 768Mi}
+          livenessProbe:
+            exec:
+              command: [python, -c, "import time; from pathlib import Path; assert time.time()-float(Path('/tmp/ai-sre-heartbeat').read_text())<180"]
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          volumeMounts: [{name: tmp, mountPath: /tmp}]
+      volumes: [{name: tmp, emptyDir: {}}]

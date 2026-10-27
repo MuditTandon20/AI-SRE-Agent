@@ -1,0 +1,21 @@
+name: Bug report
+description: Report a reproducible problem without private logs or credentials.
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Include minimal synthetic input and sanitized errors. Never include secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit/version, operating system, Python and PostgreSQL versions.

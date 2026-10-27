@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local lab logs, generated secrets and benchmark output
+.demo/
+artifacts/

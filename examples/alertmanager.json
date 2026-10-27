@@ -1,0 +1,25 @@
+{
+  "version": "4",
+  "status": "firing",
+  "receiver": "agent",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "CheckoutFailure",
+        "service": "demo-service",
+        "environment": "local",
+        "severity": "critical",
+        "scenario": "application_error"
+      },
+      "annotations": {
+        "summary": "Checkout failures",
+        "description": "Synthetic webhook example; change startsAt for a new occurrence."
+      },
+      "startsAt": "2026-10-27T00:00:00Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://localhost:9091",
+      "fingerprint": "example-checkout-failure"
+    }
+  ]
+}

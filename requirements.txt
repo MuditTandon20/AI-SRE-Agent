@@ -1,2 +1,15 @@
-fastapi
-uvicorn
+# Pinned direct runtime dependencies; constraints.txt pins the tested closure.
+fastapi==0.143.2
+uvicorn==0.54.0
+pydantic==2.14.1
+python-dotenv==1.2.4
+prometheus-client==0.26.0
+psycopg[binary]==3.3.6
+psycopg-pool==3.3.3
+httpx==0.28.1
+langgraph==1.2.17
+boto3==1.43.118
+PyYAML==6.0.3
+opentelemetry-sdk==1.45.1
+opentelemetry-exporter-otlp-proto-http==1.45.1
+opentelemetry-instrumentation-fastapi==0.66b1

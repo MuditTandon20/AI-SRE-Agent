@@ -1,0 +1,22 @@
+groups:
+  - name: demo
+    rules:
+      - alert: DemoErrorRate
+        expr: sum(rate(demo_requests_total{code=~"5.."}[1m])) > 0.1
+        for: 10s
+        labels:
+          service: demo-service
+          environment: local
+          severity: warning
+        annotations:
+          summary: Demo checkout errors
+          description: Synthetic checkout failures detected; investigate logs and metrics.
+      - alert: DemoHighLatency
+        expr: rate(demo_duration_seconds_sum[1m]) / rate(demo_duration_seconds_count[1m]) > 0.1
+        for: 10s
+        labels:
+          service: demo-service
+          environment: local
+          severity: warning
+        annotations:
+          summary: Demo checkout latency

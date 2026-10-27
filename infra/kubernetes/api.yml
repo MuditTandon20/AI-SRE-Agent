@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-sre-api
+  namespace: ai-sre
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ai-sre, component: api}
+  template:
+    metadata:
+      labels: {app: ai-sre, component: api}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, fsGroup: 10001}
+      containers:
+        - name: api
+          image: ai-sre-agent:0.1.0-dev
+          ports: [{containerPort: 8000}]
+          envFrom:
+            - configMapRef: {name: ai-sre-config}
+            - secretRef: {name: ai-sre-secrets}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: '1', memory: 512Mi}
+          readinessProbe:
+            httpGet: {path: /ready, port: 8000}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8000}
+            initialDelaySeconds: 20
+          startupProbe:
+            httpGet: {path: /health, port: 8000}
+            failureThreshold: 12
+            periodSeconds: 5
+          volumeMounts: [{name: tmp, mountPath: /tmp}]
+      volumes: [{name: tmp, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-sre-api
+  namespace: ai-sre
+spec:
+  selector: {app: ai-sre, component: api}
+  ports: [{port: 8000, targetPort: 8000}]

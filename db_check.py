@@ -1,17 +1,18 @@
-import os
+"""Print stored incident summaries using the same configuration as the API."""
+
 import psycopg
-from dotenv import load_dotenv
 
-load_dotenv()
+from ai_sre_agent.config import Settings
 
-with psycopg.connect(
-    host="localhost",
-    port=5433,
-    dbname=os.environ["POSTGRES_DB"],
-    user=os.environ["POSTGRES_USER"],
-    password=os.environ["POSTGRES_PASSWORD"],
-) as conn:
-    with conn.cursor() as cur:
-        cur.execute("SELECT id, title, severity FROM incidents")
-        for row in cur.fetchall():
+
+def main():
+    settings = Settings.from_env()
+    with psycopg.connect(**settings.connection_kwargs()) as conn:
+        for row in conn.execute(
+            "SELECT id, title, severity FROM incidents ORDER BY id DESC LIMIT 100"
+        ):
             print(row)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-sre-config
+  namespace: ai-sre
+data:
+  POSTGRES_HOST: replace-with-your-database-host
+  POSTGRES_PORT: '5432'
+  POSTGRES_SSLMODE: verify-full
+  EXECUTION_MODE: live
+  LLM_PROVIDER: deterministic
+  PROMETHEUS_URL: http://prometheus.monitoring.svc:9090
+  LOKI_URL: http://loki.monitoring.svc:3100
+  REMEDIATION_ENABLED: 'false'
+  NOTIFICATION_MODE: disabled
+  WORKER_HEARTBEAT_FILE: /tmp/ai-sre-heartbeat

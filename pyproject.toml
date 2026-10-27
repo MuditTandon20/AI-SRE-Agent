@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-sre-agent"
+version = "0.1.0.dev0"
+description = "Self-hosted, evidence-driven incident investigation (early development)"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[project.scripts]
+ai-sre-api = "ai_sre_agent.launch:main"
+ai-sre-worker = "ai_sre_agent.worker:main"
+ai-sre-migrate = "ai_sre_agent.migrate:main"
+ai-sre-evaluate = "ai_sre_agent.evaluate:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+include = ["ai_sre_agent*"]
+
+[tool.setuptools.package-data]
+ai_sre_agent = ["migrations/*.sql", "runbooks/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: requires TEST_DATABASE_URL pointing at a disposable PostgreSQL database"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
